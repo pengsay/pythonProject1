@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends
-from app.f5_related.f5_token import get_token
-import app.f5_related.schemas
+from f5_related.f5_token import get_token
+import f5_related.schemas
 from fastapi.encoders import jsonable_encoder
 import requests
 import json
-from app.user_related.get_token import get_current_user
+from user_related.get_token import get_current_user
 from openpyxl import load_workbook
 from io import BytesIO as IO  # for modern python
 import pandas as pd
-from app.f5_related.to_excel import to_excel
-from app.config import Setting
+from f5_related.to_excel import to_excel
+from config import Setting
 router = APIRouter()
 settings = Setting()
 root = settings.root
@@ -35,7 +35,7 @@ def pool_toexcel():
 
 
 @router.post("/add_pool")
-def add_pool( pool: app.f5_related.schemas.Pool):
+def add_pool( pool: f5_related.schemas.Pool):
     token = get_token(root)
     url = f"https://{root}/mgmt/tm/ltm/pool"
     payload = json.dumps(jsonable_encoder(pool))

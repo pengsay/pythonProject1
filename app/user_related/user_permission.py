@@ -1,8 +1,8 @@
 import json
 
-from app.user_related import models
+from user_related import models
 from fastapi import Depends
-from app.fastapi_permissions import (
+from fastapi_permissions import (
     Allow,
     Authenticated,
     Deny,
@@ -10,7 +10,7 @@ from app.fastapi_permissions import (
     configure_permissions,
     All,
 )
-from app.user_related.get_token import get_current_user
+from user_related.get_token import get_current_user
 
 user_acl_list = [
     (Allow, Everyone, "show"),

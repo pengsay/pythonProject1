@@ -1,9 +1,9 @@
 import json
 
 from fastapi import APIRouter
-from app.f5_related.f5_token import get_token
+from f5_related.f5_token import get_token
 import requests
-from app.config import Setting
+from config import Setting
 router = APIRouter()
 settings = Setting()
 root = settings.root

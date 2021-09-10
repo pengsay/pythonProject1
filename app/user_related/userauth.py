@@ -3,9 +3,9 @@ from typing import Optional
 from jose import jwt
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
-from app.config import SECRET_KEY, ALGORITHM
+from config import SECRET_KEY, ALGORITHM
 from sqlalchemy.orm import Session
-from app.user_related import models
+from user_related import models
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')

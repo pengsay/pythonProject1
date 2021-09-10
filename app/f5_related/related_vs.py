@@ -1,9 +1,9 @@
 import requests
 import json
 from fastapi import APIRouter
-from app.f5_related.f5_token import get_token
-from app.config import Setting
-from app.f5_related.to_excel import to_excel
+from f5_related.f5_token import get_token
+from config import Setting
+from f5_related.to_excel import to_excel
 
 router = APIRouter()
 settings = Setting()

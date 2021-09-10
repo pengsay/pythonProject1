@@ -1,6 +1,6 @@
 from requests import request
 import json
-from app.config import Setting
+from config import Setting
 
 settings = Setting()
 

@@ -3,18 +3,18 @@ from datetime import timedelta
 from fastapi import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 
-from app.f5_related.f5_token import get_token
+
 from fastapi.encoders import jsonable_encoder
 import requests
-from app.user_related import schemas, models
+from user_related import schemas, models
 from sqlalchemy.orm import Session
-from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 import json
 from starlette.exceptions import HTTPException
 from jose import JWTError, jwt
-from app.database.database import SessionLocal
+from database.database import SessionLocal
 from fastapi import Depends, FastAPI, HTTPException, status, File, UploadFile
-from app.user_related.userauth import get_user_username, verify_password, get_user, oauth2_scheme, create_access_token, \
+from user_related.userauth import get_user_username, verify_password, get_user, oauth2_scheme, create_access_token, \
     get_password_hash
 
 router = APIRouter()
