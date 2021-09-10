@@ -4,6 +4,7 @@ from fastapi import APIRouter
 from app.f5_related.f5_token import get_token
 from app.config import Setting
 from app.f5_related.to_excel import to_excel
+
 router = APIRouter()
 settings = Setting()
 root = settings.root
@@ -216,7 +217,21 @@ def get_virtual(vs_name):
 
 @router.post("/vs_toexcel")
 def vs_to_excel():
-    return to_excel(get_all_virtual())
+    data = get_all_virtual()
+    end = []
+    for i in data:
+
+        temp = {
+            "name": i['name'],
+            "rules_name": [j['name'] for j in i['rules']] if 'rules' in i else None,
+            "rules": [j['info'] for j in i['rules']] if 'rules' in i else None,
+            "pool_name":[j["pool"]["name"] for j in i["pool"]] if "pool" in i else None,
+            "pool_member":[j["pool"]["members"] for j in i["pool"]] if "pool" in i else None,
+            "monitor":[j["pool"]["monitor"] for j in i["pool"]] if "pool" in i else None,
+            "partition":i["partition"]}
+        end.append(temp)
+    return to_excel(end)
+
 
 
 @router.post("/")

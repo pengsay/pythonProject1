@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=p785084298
-      - MYSQL_DATABASE=test
+      - MYSQL_DATABASE=f5_project
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./logs:/logs
