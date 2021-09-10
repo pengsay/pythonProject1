@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  db:
+    container_name: db
+    image: mysql:8.0.19
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=p785084298
+      - MYSQL_DATABASE=test
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./logs:/logs
+      - ./data:/var/lib/mysql
+      - ./conf.d:/etc/mysql/conf.d
+    ports:
+      - "3310:3306"
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 15430:8080
+  app:
+    image: f5image
+    restart: always
+    ports:
+      - "9000:80"
+    environment:
+      - USERNAME="admin"
+      - PASSWORD="1qaz@WSX3edc$RFV"
+      - ROOT="172.16.66.153"
+      - DB_USERNAME=root
+      - DB_PWD=p785084298
+      - DB_HOST=db
