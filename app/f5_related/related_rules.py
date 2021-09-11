@@ -6,7 +6,7 @@ import requests
 from config import Setting
 router = APIRouter()
 settings = Setting()
-root = settings.root
+root = settings.f5_root
 
 @router.get("/")
 def get_rules():

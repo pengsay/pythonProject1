@@ -6,9 +6,9 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 class Setting(BaseSettings):
-    username: str = "admin"
-    password: str = "1qaz@WSX3edc$RFV"
-    root: str = "172.16.66.153"
+    f5_username: str = "admin"
+    f5_password: str = "1qaz@WSX3edc$RFV"
+    f5_root: str = "172.16.66.153"
     db_host: str = "127.0.0.1"
     db_username: str = "root"
     db_pwd: str = "p785084298"

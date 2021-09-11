@@ -7,7 +7,7 @@ from f5_related.to_excel import to_excel
 
 router = APIRouter()
 settings = Setting()
-root = settings.root
+root = settings.f5_root
 
 
 @router.get("/get_virtual/")
@@ -35,7 +35,9 @@ def get_all_virtual():
             if type(vs['rulesReference']) == dict:
                 irules_url = vs['rulesReference']['link'].replace("localhost", root)
                 irules_response = requests.request("GET", irules_url, headers=headers, data=payload, verify=False)
-                irules_info = json.loads(irules_response.content.decode())
+                print(irules_response)
+                irules_info = json.loads(irules_response.text)
+
                 result["rules"] = [{
                     "name": irules_info["name"],
                     "info": irules_info['apiAnonymous']
@@ -45,7 +47,7 @@ def get_all_virtual():
                 for j in vs['rulesReference']:
                     irules_url = j['link'].replace("localhost", root)
                     irules_response = requests.request("GET", irules_url, headers=headers, data=payload, verify=False)
-                    irules_info = json.loads(irules_response.content.decode())
+                    irules_info = json.loads(irules_response.text)
 
                     temp.append({
                         "name": irules_info["name"],
@@ -57,11 +59,11 @@ def get_all_virtual():
             if type(vs["poolReference"]) == dict:
                 pool_url = vs["poolReference"]['link'].replace("localhost", root)
                 pool_response = requests.request("GET", pool_url, headers=headers, data=payload, verify=False)
-                pool_info = json.loads(pool_response.content.decode())
+                pool_info = json.loads(pool_response.text)
                 # get members
                 members_url = pool_info['membersReference']['link'].replace("localhost", root)
                 members_response = requests.request("GET", members_url, headers=headers, data=payload, verify=False)
-                members_list = json.loads(members_response.content.decode())["items"]
+                members_list = json.loads(members_response.text)["items"]
                 end_menber = []
                 for i in members_list:
                     temp = {

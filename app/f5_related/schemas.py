@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel
 
 
@@ -10,4 +12,4 @@ class Member(BaseModel):
 class Pool(BaseModel):
     name: str
     partition: str
-    members: list[Member]
+    members: List[Member]

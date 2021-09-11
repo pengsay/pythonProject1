@@ -12,7 +12,7 @@ from f5_related.to_excel import to_excel
 from config import Setting
 router = APIRouter()
 settings = Setting()
-root = settings.root
+root = settings.f5_root
 @router.get("/")
 def get_pool():
     token = get_token(root)
