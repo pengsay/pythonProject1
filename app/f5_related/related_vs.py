@@ -4,6 +4,7 @@ from fastapi import APIRouter
 from f5_related.f5_token import get_token
 from config import Setting
 from f5_related.to_excel import to_excel
+from fastapi import HTTPException
 
 router = APIRouter()
 settings = Setting()
@@ -35,8 +36,10 @@ def get_all_virtual():
             if type(vs['rulesReference']) == dict:
                 irules_url = vs['rulesReference']['link'].replace("localhost", root)
                 irules_response = requests.request("GET", irules_url, headers=headers, data=payload, verify=False)
-                print(irules_response)
-                irules_info = json.loads(irules_response.text)
+                try:
+                    irules_info = json.loads(irules_response.content.decode())
+                except:
+                    raise HTTPException(status_code=400,detail="请求有误稍后重试")
 
                 result["rules"] = [{
                     "name": irules_info["name"],
@@ -47,7 +50,10 @@ def get_all_virtual():
                 for j in vs['rulesReference']:
                     irules_url = j['link'].replace("localhost", root)
                     irules_response = requests.request("GET", irules_url, headers=headers, data=payload, verify=False)
-                    irules_info = json.loads(irules_response.text)
+                    try:
+                        irules_info = json.loads(irules_response.content.decode())
+                    except:
+                        raise HTTPException(status_code=400, detail="请求有误稍后重试")
 
                     temp.append({
                         "name": irules_info["name"],
@@ -58,39 +64,22 @@ def get_all_virtual():
         if 'poolReference' in vs:
             if type(vs["poolReference"]) == dict:
                 pool_url = vs["poolReference"]['link'].replace("localhost", root)
-                pool_response = requests.request("GET", pool_url, headers=headers, data=payload, verify=False)
-                pool_info = json.loads(pool_response.text)
+                pool_response = requests.request("GET", pool_url, headers=headers,  verify=False)
+                try:
+                    pool_info = json.loads(pool_response.text)
+                except:
+                    raise HTTPException(status_code=400,detail="请求有误稍后重试")
                 # get members
-                members_url = pool_info['membersReference']['link'].replace("localhost", root)
-                members_response = requests.request("GET", members_url, headers=headers, data=payload, verify=False)
-                members_list = json.loads(members_response.text)["items"]
-                end_menber = []
-                for i in members_list:
-                    temp = {
-                        "name": i["name"],
-                        "fullPath": i["fullPath"],
-                        "session": i["session"],
-                        "state": i["state"]
-                    }
-                    end_menber.append(temp)
-                result['pool'] = [{
-                    "pool": {
-                        "name": pool_info['name'],
-                        "monitor": pool_info["monitor"] if "monitor" in pool_info else None,
-                        "members": end_menber if "members" in pool_info else None,
-                    },
-                }]
-            else:
-                pool_list = []
-                for j in vs["poolReference"]:
-                    pool_url = j['link'].replace("localhost", root)
-                    pool_response = requests.request("GET", pool_url, headers=headers, data=payload, verify=False)
-                    pool_info = json.loads(pool_response.content.decode())
-                    # get members
+                end_member = []
+                if "membersReference" in pool_info:
                     members_url = pool_info['membersReference']['link'].replace("localhost", root)
+
                     members_response = requests.request("GET", members_url, headers=headers, data=payload, verify=False)
-                    members_list = json.loads(members_response.content.decode())["items"]
-                    end_menber = []
+                    try:
+                        members_list = json.loads(members_response.text)["items"]
+                    except:
+                        raise HTTPException(status_code=400, detail="请求有误稍后重试")
+
                     for i in members_list:
                         temp = {
                             "name": i["name"],
@@ -98,12 +87,44 @@ def get_all_virtual():
                             "session": i["session"],
                             "state": i["state"]
                         }
-                        end_menber.append(temp)
+                        end_member.append(temp)
+                result['pool'] = [{
+                    "pool": {
+                        "name": pool_info['name'],
+                        "monitor": pool_info["monitor"] if "monitor" in pool_info else None,
+                        "members": end_member,
+                    },
+                }]
+            else:
+                pool_list = []
+                for j in vs["poolReference"]:
+                    pool_url = j['link'].replace("localhost", root)
+                    pool_response = requests.request("GET", pool_url, headers=headers, data=payload, verify=False)
+                    try:
+                        pool_info = json.loads(pool_response.content.decode())
+                    except:
+                        raise HTTPException(status_code=400, detail="请求有误稍后重试")
+                    # get members
+                    members_url = pool_info['membersReference']['link'].replace("localhost", root)
+                    members_response = requests.request("GET", members_url, headers=headers, data=payload, verify=False)
+                    try:
+                        members_list = json.loads(members_response.content.decode())["items"]
+                    except:
+                        raise HTTPException(status_code=400, detail="请求有误稍后重试")
+                    end_member = []
+                    for i in members_list:
+                        temp = {
+                            "name": i["name"],
+                            "fullPath": i["fullPath"],
+                            "session": i["session"],
+                            "state": i["state"]
+                        }
+                        end_member.append(temp)
                     pool_list.append({
                         "pool": {
                             "name": pool_info['name'],
                             "monitor": pool_info["monitor"] if "monitor" in pool_info else None,
-                            "members": end_menber if "members" in pool_info else None,
+                            "members": end_member if "members" in pool_info else None,
                         },
                     })
                 result['pool'] = pool_list
