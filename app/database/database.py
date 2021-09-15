@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from f5_related.f5_token import settings
+from f5_token import settings
 
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{settings.db_username}:{settings.db_pwd}@{settings.db_host}:3306/f5_project"
 # SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:p785084298@127.0.0.1:3306/f5_project"

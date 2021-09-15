@@ -5,7 +5,6 @@ from fastapi import Depends
 from fastapi_permissions import (
     Allow,
     Authenticated,
-    Deny,
     Everyone,
     configure_permissions,
     All,

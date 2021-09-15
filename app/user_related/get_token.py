@@ -2,8 +2,6 @@ from datetime import timedelta
 
 from fastapi import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
-
-
 from fastapi.encoders import jsonable_encoder
 import requests
 from user_related import schemas, models

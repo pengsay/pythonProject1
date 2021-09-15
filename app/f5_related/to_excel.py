@@ -5,6 +5,7 @@ from fastapi.responses import Response
 from fastapi import HTTPException
 
 
+
 def to_excel(data):
     output = IO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -12,5 +13,8 @@ def to_excel(data):
     s.to_excel(writer, sheet_name="data")
     writer.save()
     output.seek(0)
-    return Response(content=output.read(),
+    try:
+        return Response(content=output.read(),
                     media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    except:
+        raise HTTPException(status_code=400, detail="请求有误稍后重试")
