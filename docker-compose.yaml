@@ -7,7 +7,7 @@ services:
       - "9000:80"
     environment:
       - F5_USERNAME=admin
-      - F5_PASSWORD=1qaz@WSX3edc\$RFV
+      - F5_PASSWORD=1qaz@WSX3edc$$RFV
       - F5_ROOT=172.16.66.153
       - DB_USERNAME=root
       - DB_PWD=p785084298

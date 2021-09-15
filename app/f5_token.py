@@ -23,8 +23,7 @@ def get_token(root):
         token = json.loads(response.text)['token']['token']
         return token
     except Exception as e:
-
-        logger.error(response.text)
+        logger.error(e)
         raise HTTPException(status_code=400, detail="请求有误稍后重试")
 
 
