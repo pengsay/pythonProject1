@@ -92,7 +92,6 @@ def get_all_virtual():
                 if "membersReference" in pool_info:
                     members_url = pool_info['membersReference']['link'].replace("localhost", root)
 
-
                     try:
                         members_response = requests.request("GET", members_url, headers=headers, data=payload,
                                                             verify=False)
@@ -362,7 +361,8 @@ def delete_vs(vs_name):
         response = requests.request("DELETE", url, headers=headers, verify=False)
         if "code" in response.text:
             raise Exception(response.text)
-        return {"info","删除成功"}
+        return {"info": "删除成功"}
+        s
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=400, detail="请求有误稍后重试")
@@ -379,7 +379,6 @@ def stop_vs(partition_name, listener_name):
     }
     try:
         response = requests.request("PATCH", url, headers=headers, data=payload, verify=False)
-
 
         if "code" in json.loads(response.text):
             raise Exception(json.loads(response.text))
@@ -404,7 +403,7 @@ def start_vs(partition_name, listener_name):
         response = requests.request("PATCH", url, headers=headers, data=payload, verify=False)
         if "code" in json.loads(response.text):
             raise Exception(json.loads(response.text))
-        return {"info":"修改成功"}
+        return {"info": "修改成功"}
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=400, detail="请求有误稍后重试")
@@ -420,7 +419,6 @@ def get_stats(partition, vs_name):
         'Content-Type': 'application/json',
         'X-F5-Auth-Token': token
     }
-
 
     try:
         response = requests.request("GET", url, headers=headers, data=payload, verify=False)
