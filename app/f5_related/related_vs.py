@@ -362,7 +362,7 @@ def delete_vs(vs_name):
         if "code" in response.text:
             raise Exception(response.text)
         return {"info": "删除成功"}
-        s
+        
     except Exception as e:
         logger.error(e)
         raise HTTPException(status_code=400, detail="请求有误稍后重试")
