@@ -1,14 +1,51 @@
 version: '3.3'
+networks:
+    foresight-networks:
+        external: true
+
+x-app-common:
+    &app-common
+    build:
+        context: ./
+        dockerfile: build/service/Dockerfile
+        args:
+            ENVIRONMENT: development
+    env_file:
+        - .fastapienv
+    depends_on:
+        &app-common-depends-on
+        app-db:
+            condition: service_healthy
+    networks:
+        - foresight-networks
+
 services:
   app:
-    build: ./
+    <<: *app-common
     restart: always
     ports:
       - "9000:80"
-    environment:
-      - F5_USERNAME=admin
-      - F5_PASSWORD=1qaz@WSX3edc$$RFV
-      - F5_ROOT=172.16.66.153
-      - DB_USERNAME=root
-      - DB_PWD=p785084298
-      - DB_HOST=172.16.66.97
+    volumes:
+      - ./app:/usr/src/app
+
+  app-db:
+      image: postgres:13.4-buster
+      hostname: app-db
+      command: postgres -c listen_addresses='*'
+      environment:
+          - POSTGRES_USER=foresight
+          - POSTGRES_PASSWORD=foresight
+          - POSTGRES_DB=foresight
+          # Uncomment these lines to persist data on the local filesystem.
+          - PGDATA=/var/lib/postgresql/data/pgdata
+      volumes:
+          - ./app-db:/var/lib/postgresql/data
+      ports:
+          - "25432:5432/tcp"
+      healthcheck:
+          test: [ "CMD", "pg_isready", "-U", "airflow" ]
+          interval: 5s
+          retries: 5
+      restart: always
+      networks:
+          - foresight-networks

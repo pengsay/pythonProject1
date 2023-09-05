@@ -9,11 +9,11 @@ BASEDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class Setting(BaseSettings):
     f5_username: str = "admin"
-    f5_password: str = "1qaz@WSX3edc$RFV"
-    f5_root: str = "172.16.66.153"
-    db_host: str = "127.0.0.1"
-    db_username: str = "root"
-    db_pwd: str = "p785084298"
-    fw_username: str = "sypeng"
-    fw_password: str = "P@ssw0rd"
+    f5_password: str = "admin"
+    f5_root: str = "172.16.60.68"
+    db_host: str = "app-db"
+    db_username: str = "foresight"
+    db_pwd: str = "foresight"
+    fw_username: str = "admin"
+    fw_password: str = "1qaz@WSX3edc"
     fw_root: str = "172.16.66.120"
