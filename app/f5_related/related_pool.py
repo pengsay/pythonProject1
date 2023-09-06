@@ -44,6 +44,7 @@ def add_pool(pool: f5_related.schemas.Pool):
     token = get_token(root)
     url = f"https://{root}/mgmt/tm/ltm/pool"
     payload = json.dumps(jsonable_encoder(pool))
+
     headers = {
         'Content-Type': 'application/json',
         'X-F5-Auth-Token': token

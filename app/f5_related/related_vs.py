@@ -341,6 +341,7 @@ def add_virtual(name, destination, profiles="/Common/fastL4", sat_type=None, sat
     }
     try:
         response = requests.request("POST", url, headers=headers, data=payload, verify=False)
+        print("res:",response.text)
         if "code" in json.loads(response.text):
             raise Exception(json.loads(response.text))
         return json.loads(response.text)
@@ -352,7 +353,7 @@ def add_virtual(name, destination, profiles="/Common/fastL4", sat_type=None, sat
 @router.delete("/{vs_name}")
 def delete_vs(vs_name):
     token = get_token(root)
-    url = f"https://172.16.66.153/mgmt/tm/ltm/virtual/{vs_name}"
+    url = f"https://{root}/mgmt/tm/ltm/virtual/{vs_name}"
     headers = {
         'X-F5-Auth-Token': token,
         'Content-Type': 'application/json'
